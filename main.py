@@ -1,5 +1,18 @@
-import random, sys, time, math, pygame, os
-from pygame.locals import *
+import asyncio, random, sys, time, math, pygame, os
+
+QUIT = pygame.QUIT
+KEYDOWN = pygame.KEYDOWN
+KEYUP = pygame.KEYUP
+K_LEFT = pygame.K_LEFT
+K_RIGHT = pygame.K_RIGHT
+K_UP = pygame.K_UP
+K_DOWN = pygame.K_DOWN
+K_a = pygame.K_a
+K_d = pygame.K_d
+K_w = pygame.K_w
+K_s = pygame.K_s
+K_r = pygame.K_r
+K_ESCAPE = pygame.K_ESCAPE
 
 FPS = 30
 WINWIDTH = 640
@@ -55,7 +68,7 @@ def resource_path(relative_path):
     # Join the base path with the relative path to get the full path.
     return os.path.join(base_path, relative_path)
 
-def main():
+async def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT, L_SQUIR_IMG, R_SQUIR_IMG, GRASSIMAGES
 
     pygame.init()
@@ -72,9 +85,9 @@ def main():
         GRASSIMAGES.append(pygame.image.load(resource_path('grass%s.png' % i)))
 
     while True:
-        runGame()
+        await runGame()
 
-def runGame():
+async def runGame():
     invulnerableMode = False
     invulnerableStartTime = 0
     gameOverMode = False
@@ -253,6 +266,7 @@ def runGame():
 
         pygame.display.update()
         FPSCLOCK.tick(FPS)
+        await asyncio.sleep(0)
 
 def drawHealthMeter(currentHealth):
     for i in range(currentHealth):
@@ -318,4 +332,4 @@ def isOutsideActiveArea(camerax, cameray, obj):
     return not boundsRect.colliderect(objRect)
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main())
